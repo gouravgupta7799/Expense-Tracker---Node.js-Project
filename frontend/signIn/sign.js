@@ -20,7 +20,8 @@ document.getElementById('submitBtn').addEventListener('click', (e) => {
 };
 
 axios.request(config)
-.then((response) => {
+  .then((response) => {
+    window.location.href = 'http://127.0.0.1:5500/logIn/login.html'
   console.log(JSON.stringify(response.data));
 })
 .catch((error) => {

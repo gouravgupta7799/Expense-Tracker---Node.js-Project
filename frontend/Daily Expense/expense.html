@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login page</title>
+    <link rel="stylesheet" href="expense.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+
+    <form class='form'>
+      <input type="text" id="description" placeholder="description" required>
+      <input type="number" id="price" placeholder="price" required>
+      <input type="text" id="category" placeholder="category" required>
+      <button class="btn" id="exepenseBtn" type="submit">add expense</button>
+    </form>
+
+    <table id="tableItems" class="table">
+        <th>description</th>
+        <th>price</th>
+        <th>category</th>
+        <th>button</th>
+      </tr>
+      <td class="withDesc">fgh</td>
+      <td class="withPrice">$ghj</td>
+      <td class="withcat">zxc</td>
+      <td><button class="Btn1">delete</button>
+      
+      </td>
+    </table>
+
+    <script src="expense.js"></script>
+  </body>
+
+</html>

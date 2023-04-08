@@ -1,6 +1,5 @@
 
 const bcrypt = require('bcrypt');
-const { where } = require('sequelize');
 const User = require('../model/model');
 
 exports.addNewUser = async (req, res, next) => {

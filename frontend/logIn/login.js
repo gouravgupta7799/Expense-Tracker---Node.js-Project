@@ -22,6 +22,9 @@ document.getElementById('loginBtn').addEventListener('click', (e) => {
   axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
+      if (response.status === 200) {
+        window.location.href = 'http://127.0.0.1:5500/Daily%20Expense/expense.html?'
+      }
     })
     .catch((error) => {
       console.log(error);
