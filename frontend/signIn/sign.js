@@ -21,7 +21,7 @@ document.getElementById('submitBtn').addEventListener('click', (e) => {
 
 axios.request(config)
   .then((response) => {
-    window.location.href = 'http://127.0.0.1:5500/logIn/login.html'
+    window.location.href = `http://127.0.0.1:5500/logIn/login.html?${response.data.id}`
   console.log(JSON.stringify(response.data));
 })
 .catch((error) => {

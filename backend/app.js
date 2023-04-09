@@ -17,6 +17,10 @@ app.use(bodyperser.json({ extended: false }))
 app.use('/user', router);
 app.use('/expense', expence);
 
+User.hasMany(Expense);
+User.belongsTo(User);
+
+
 
 sequelize
   // .sync({ force: true })
