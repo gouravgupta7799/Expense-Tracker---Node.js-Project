@@ -1,5 +1,7 @@
+// let Razorpay = require('Razorpay');
 
 let url = 'http://localhost:4000'
+
 let token = localStorage.getItem('token');
 let table = document.getElementById('tableItems');
 let form = document.getElementById('submitForm');
@@ -62,8 +64,8 @@ function showData() {
 
   axios.request(config)
     .then((res) => {
-      console.log(res)
-      let resp = res.data;
+      // console.log(res)
+      let resp = res.data; 
       resp.forEach(response => {
 
         let tr = document.createElement('tr');
@@ -147,7 +149,7 @@ document.getElementById('tableItems').addEventListener('click', (e) => {
 document.getElementById('updateBtn').addEventListener('click', (e) => {
   // e.preventDefault()
   let data = JSON.stringify({
-    id:editId,
+    id: editId,
     description: document.getElementById('newdescription').value,
     price: document.getElementById('newprice').value,
     category: document.getElementById('newcategory').value
@@ -166,9 +168,49 @@ document.getElementById('updateBtn').addEventListener('click', (e) => {
 
   axios.request(config)
     .then((res) => {
-      // let li = e.target.parentElement.previousElementSibling
-      // let li2 = li.parentElement.previousElementSibling
-      // table.removeChild(li2)
       console.log(res.data)
     })
 })
+
+
+document.getElementById('premium').addEventListener('click', (e) => {
+  e.preventDefault()
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: url + '/primemember/purches',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    // data: data
+  };
+
+  axios.request(config)
+    .then((response) => {
+      // console.log(response.data.key_id)
+      // console.log(response.data.ord.id)
+      console.log(response)
+      let option = {
+        "key": response.data.key_id,
+        "order_id": response.data.ord.orderId,
+        "handler": async function (response) {
+
+          await axios.post(url + '/primemember/updatetransaction', {
+            order_id: option.order_id, payment_id: response.razorpay_payment_id, status: 'SUCCESSFUL'
+          }, { headers: { 'Authorization': token, } })
+          document.getElementById('premium').style.display = 'none';
+        }
+      }
+      const rezl = new Razorpay(option);
+
+      rezl.open();
+      // e.preventDefault();
+
+      rezl.on('payment.failed', async function (response) {
+        await axios.post(url + '/primemember/updatetransaction', {
+          order_id: option.order_id, payment_id: response.razorpay_payment_id, status: 'FAILED'
+        }, { headers: { 'Authorization': token, } })
+      })
+    })
+});

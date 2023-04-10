@@ -22,7 +22,7 @@ exports.newExpense = async (req, res, next) => {
 
 exports.allExpense = (req, res, next) => {
   let Id = req.user.id;
-  // console.log(req.user.id)
+  // console.log(req)
   Expense.findAll({ where: { userId: Id } })
     .then(result => {
       // console.log(result)
@@ -51,7 +51,7 @@ exports.updateExpense = async (req, res, next) => {
   try {
     let Id = req.body.id;
     let userId = req.user.id;
-
+    // console.log(Id)
     await Expense.update(
       {
         Description: req.body.description,

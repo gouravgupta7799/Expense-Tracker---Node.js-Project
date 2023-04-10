@@ -1,4 +1,4 @@
-body {
+.conaitaner {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,6 +25,7 @@ input {
 input:focus {
   border-color: red;
 }
+
 .table {
   background: #c4bfbf;
   margin: 20px 0;
@@ -44,7 +45,7 @@ td {
   padding-bottom: 10px;
 }
 
-.Btn1{
+.Btn1 {
   background: #ff3a09;
   border-radius: 7px;
   margin: 2px;
@@ -58,12 +59,20 @@ td {
   padding: 10px 15px;
 }
 
-.btn{
+.btn {
   display: flex;
   font-size: large;
   justify-content: center;
   color: rgb(227, 227, 233);
   background-color: blue;
+  padding: 7px 12px;
+  border-radius: 9px;
+}
+
+.primeBtn {
+  font-size: large;
+  color: rgb(14, 14, 212);
+  background-color: rgb(101, 241, 8);
   padding: 7px 12px;
   border-radius: 9px;
 }
