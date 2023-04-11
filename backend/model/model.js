@@ -28,6 +28,11 @@ const User = sequelize.define('user', {
     allowNull: false,
     unique: true
   },
+  isPrime: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+  },
+  totalExpense: Sequelize.INTEGER,
 });
 
 module.exports = User;

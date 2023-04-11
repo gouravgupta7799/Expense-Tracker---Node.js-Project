@@ -1,5 +1,7 @@
 
+const { toInteger } = require('lodash');
 const Expense = require('../model/expense');
+let User = require('../model/model')
 
 exports.newExpense = async (req, res, next) => {
   try {
@@ -11,8 +13,12 @@ exports.newExpense = async (req, res, next) => {
       Description: description,
       Price: price,
       Category: category,
-      userId: req.user.id
+      userId: req.user.id,
     })
+    let user = await User.findOne({ where: { id: req.user.id } })
+    user.totalExpense = toInteger(price) + user.totalExpense
+    user.save()
+
     res.status(200).send(newExpense);
 
   } catch (err) {
@@ -26,7 +32,7 @@ exports.allExpense = (req, res, next) => {
   Expense.findAll({ where: { userId: Id } })
     .then(result => {
       // console.log(result)
-      res.send(result)
+      res.json({ data: result, prime: req.user.isPrime })
     })
     .catch(err => console.log(err))
 }
@@ -38,7 +44,13 @@ exports.deleteExpense = async (req, res, next) => {
     // console.log(Id);
     // console.log(userId);
 
-    await Expense.destroy({ where: { id: Id, userId: userId } });
+    let exp = await Expense.findOne({ where: { id: Id, userId: userId } });
+
+    let user = await User.findOne({ where: { id: req.user.id } })
+    user.totalExpense = user.totalExpense - exp.Price
+    user.save()
+    exp.destroy()
+
     res.send('item deleted');
   }
   catch (err) {
@@ -52,6 +64,9 @@ exports.updateExpense = async (req, res, next) => {
     let Id = req.body.id;
     let userId = req.user.id;
     // console.log(Id)
+    let exp = await Expense.findOne({ where: { id: Id, userId: userId } });
+    let user = await User.findOne({ where: { id: req.user.id } })
+
     await Expense.update(
       {
         Description: req.body.description,
@@ -59,6 +74,9 @@ exports.updateExpense = async (req, res, next) => {
         Category: req.body.category,
       },
       { where: { id: Id, userId: userId } });
+
+    user.totalExpense = (user.totalExpense - exp.Price) + toInteger(req.body.price)
+    user.save()
     res.send('item updeted');
   }
   catch (err) {

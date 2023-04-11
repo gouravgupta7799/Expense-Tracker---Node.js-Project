@@ -93,3 +93,7 @@ td {
 .headLine {
   background: #a8a8aa;
 }
+
+#board li {
+  list-style: none;
+}

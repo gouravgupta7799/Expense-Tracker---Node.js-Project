@@ -6,7 +6,7 @@ const sequelize = require('./utils/DataBase.js');
 let router = require('./routers/router.js');
 let expence = require('./routers/expense.js');
 let prime = require('./routers/purches.js');
-
+let primeUser = require('./routers/primeUser.js')
 
 let Expense = require('./model/expense.js');
 let User = require('./model/model.js');
@@ -20,7 +20,8 @@ app.use(bodyperser.json({ extended: false }))
 
 app.use('/user', router);
 app.use('/expense', expence);
-app.use('/primemember',prime );
+app.use('/primemember', prime);
+app.use('/prime', primeUser);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

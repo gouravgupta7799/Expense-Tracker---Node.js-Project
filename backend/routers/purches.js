@@ -5,8 +5,8 @@ const controller = require('../controller/purches')
 const middle = require('../middleware/auth');
 
 
-router.use('/purches',middle.authorizerUser,controller.primeMembership)
-router.use('/updatetransaction', middle.authorizerUser, controller.transactionUpdate)
+router.use('/purches', middle.authorizerUser, controller.primeMembership);
+router.use('/updatetransaction', middle.authorizerUser, controller.transactionUpdate);
 
 
 

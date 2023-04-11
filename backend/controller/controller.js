@@ -23,7 +23,9 @@ exports.addNewUser = async (req, res, next) => {
           userName: req.body.name,
           userEmail: req.body.email,
           userContect: req.body.contect,
-          userPassword: hash
+          userPassword: hash,
+          isPrime: false,
+          totalExpense: 0
         })
 
         res.status(200).send(user);
@@ -62,7 +64,7 @@ exports.accessUser = async (req, res, next) => {
         else {
           attempt -= 1;
           if (attempt <= 0) {
-            res.status(400).send('invalid credensial, try after sometime');
+            res.status(400).send('invalid credential, try after sometime');
           } else {
             res.status(400).send(`invalid password only ${attempt} attempt left`);
           }

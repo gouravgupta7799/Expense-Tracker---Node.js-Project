@@ -1,6 +1,9 @@
 
 const Razorpay = require('razorpay');
 const Order = require('../model/order');
+const User = require('../model/model');
+const Expence = require('../model/expense');
+const Expense = require('../model/expense');
 
 exports.primeMembership = async (req, res, next) => {
   try {
@@ -33,16 +36,19 @@ exports.primeMembership = async (req, res, next) => {
 exports.transactionUpdate = async (req, res, next) => {
   try {
     let order = await Order.findOne({ where: { orderId: req.body.order_id } })
-
+    let user = await User.findOne({ where: { id: req.user.id } })
+    user.isPrime = true;
     // console.log(req.body.status);
     // console.log(req.body.payment_id)
 
     order.paymantId = req.body.payment_id;
     order.status = req.body.status;
     await order.save()
+    await user.save()
     res.status(202).json(`transection ${req.body.status}`)
   }
   catch (err) {
     console.log(err)
-  }
-}
+  };
+};
+

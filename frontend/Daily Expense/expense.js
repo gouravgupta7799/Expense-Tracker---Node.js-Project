@@ -3,10 +3,14 @@
 let url = 'http://localhost:4000'
 
 let token = localStorage.getItem('token');
+let ls = localStorage.getItem('primeUser')
 let table = document.getElementById('tableItems');
 let form = document.getElementById('submitForm');
 let editForm = document.getElementById('editForm');
+let board = document.getElementById('board');
+
 editForm.style.display = 'none';
+board.style.display = 'none';
 
 showData()
 
@@ -65,17 +69,24 @@ function showData() {
   axios.request(config)
     .then((res) => {
       // console.log(res)
-      let resp = res.data; 
+      let resp = res.data.data;
       resp.forEach(response => {
 
         let tr = document.createElement('tr');
         tr.innerHTML = `
-        <td class="withDesc">${response.Description}</td>
-        <td class="withPrice">${response.Price}</td>
-        <td class="withcat">${response.Category}</td>
-        <td><button class="Btn1 delete" id="${response.id}">delete</button><button class="Btn2 edit" id="${response.id}">edit</button></td>`
+          <td class="withDesc">${response.Description}</td>
+          <td class="withPrice">${response.Price}</td>
+          <td class="withcat">${response.Category}</td>
+          <td><button class="Btn1 delete" id="${response.id}">delete</button><button class="Btn2 edit" id="${response.id}">edit</button></td>`
         table.appendChild(tr);
       });
+      if (res.data.prime === true) {
+        premium.style.display = 'none';
+        let h1 = document.createElement('h1');
+        h1.innerHTML = 'you are a prime user now!!'
+        primeUser.append(h1)
+        primeUser.style.display = 'block'
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -121,6 +132,7 @@ document.getElementById('tableItems').addEventListener('click', (e) => {
     table.style.display = 'none';
     editForm.style.display = "block";
 
+
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -133,9 +145,8 @@ document.getElementById('tableItems').addEventListener('click', (e) => {
 
     axios.request(config)
       .then((response) => {
-        response.data.forEach(i => {
+        response.data.data.forEach(i => {
           if (i.id == id) {
-
             document.getElementById('newprice').value = i.Price;
             document.getElementById('newdescription').value = i.Description;
             document.getElementById('newcategory').value = i.Category;
@@ -196,21 +207,47 @@ document.getElementById('premium').addEventListener('click', (e) => {
         "order_id": response.data.ord.orderId,
         "handler": async function (response) {
 
-          await axios.post(url + '/primemember/updatetransaction', {
+          axios.post(url + '/primemember/updatetransaction', {
             order_id: option.order_id, payment_id: response.razorpay_payment_id, status: 'SUCCESSFUL'
-          }, { headers: { 'Authorization': token, } })
-          document.getElementById('premium').style.display = 'none';
+          }, { headers: { 'Authorization': token } })
+            .then((res) => {
+              premium.style.display = 'none';
+              let h1 = document.createElement('h1');
+              h1.innerHTML = 'you are a prime user now!!'
+              primeUser.append(h1)
+              primeUser.style.display = 'block';
+            })
         }
       }
+
       const rezl = new Razorpay(option);
 
       rezl.open();
       // e.preventDefault();
 
       rezl.on('payment.failed', async function (response) {
-        await axios.post(url + '/primemember/updatetransaction', {
+        axios.post(url + '/primemember/updatetransaction', {
           order_id: option.order_id, payment_id: response.razorpay_payment_id, status: 'FAILED'
         }, { headers: { 'Authorization': token, } })
+          .then(alert('paymant fail'))
       })
     })
 });
+
+let premium = document.getElementById('premium');
+let primeUser = document.getElementById('primeUser')
+primeUser.style.display = 'none'
+
+
+document.getElementById('leadboard').addEventListener('click', () => {
+  board.style.display = "block";
+  axios.get(url + '/prime/primeUser', { headers: { 'Authorization': token, } })
+    .then(res => {
+      console.log(res.data.leaderboardArray)
+      res.data.leaderboardArray.forEach(data => {
+        let li = document.createElement('li');
+        li.innerHTML = `name = ${data.userName} total expenses = ${data.totalExpense}`
+        board.appendChild(li);
+      });
+    })
+})
