@@ -61,17 +61,22 @@ exports.deleteExpense = async (req, res, next) => {
       where: { id: Id, userId: userId },
       transaction: t
     });
+    try {
+      let user = await User.findOne({
+        where: { id: req.user.id },
+        transaction: t
+      })
+      user.totalExpense = user.totalExpense - exp.Price;
+      user.save();
+      exp.destroy();
 
-    let user = await User.findOne({
-      where: { id: req.user.id },
-      transaction: t
-    })
-    user.totalExpense = user.totalExpense - exp.Price
-    user.save()
-    exp.destroy()
-
-    await t.commit();
-    res.send('item deleted');
+      await t.commit();
+      res.send('item deleted');
+    }
+    catch (err) {
+      console.log(err);
+      t.rollback();
+    }
   }
   catch (err) {
     console.log(err);
@@ -94,19 +99,24 @@ exports.updateExpense = async (req, res, next) => {
       where: { id: req.user.id },
       transaction: t
     })
+    try {
+      await Expense.update(
+        {
+          Description: req.body.description,
+          Price: req.body.price,
+          Category: req.body.category,
+        },
+        { where: { id: Id, userId: userId }, transaction: t });
 
-    await Expense.update(
-      {
-        Description: req.body.description,
-        Price: req.body.price,
-        Category: req.body.category,
-      },
-      { where: { id: Id, userId: userId }, transaction: t });
+      user.totalExpense = (user.totalExpense - exp.Price) + toInteger(req.body.price);
+      user.save();
+      await t.commit();
+      res.send('item updeted');
 
-    user.totalExpense = (user.totalExpense - exp.Price) + toInteger(req.body.price)
-    user.save()
-    await t.commit();
-    res.send('item updeted');
+    } catch (err) {
+      console.log(err);
+      t.rollback()
+    }
   }
   catch (err) {
     console.log(err);
