@@ -1,5 +1,5 @@
 
-let url = 'http://localhost:4000/user'
+let url = 'http://localhost:4000/'
 
 let token = localStorage.getItem('token');
 
@@ -14,7 +14,7 @@ document.getElementById('loginBtn').addEventListener('click', (e) => {
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: url + '/login',
+    url: url + 'user/login',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
@@ -43,15 +43,20 @@ let forgetemailform = document.getElementById('forgetemailform');
 
 forgetemailform.style.display = 'none';
 
-forgetPass.addEventListener('click', () => {
+forgetPass.addEventListener('click', (e) => {
+  // e.preventDefault()
   forgetemailform.style.display = 'block';
   document.getElementById('submitForm').style.display = 'none'
+})
+
+document.getElementById('forgetBtn').addEventListener('click', (e) => {
+  // e.preventDefault()
 
   let obj = {
     email: document.getElementById('forgetemailInput').value,
   }
-
-  axios.post(url + ' /password/forgotpassword', { headers: { 'Authorization': token } })
+  console.log(obj)
+  axios.post(url + 'password/forgotpassword', obj, { headers: { 'Authorization': token } })
     .then(response => {
       alert('mail send to registered Email');
     })

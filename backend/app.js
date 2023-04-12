@@ -7,6 +7,7 @@ let router = require('./routers/router.js');
 let expence = require('./routers/expense.js');
 let prime = require('./routers/purches.js');
 let primeUser = require('./routers/primeUser.js')
+const forgetPassword = require('./routers/forgetPassword.js')
 
 let Expense = require('./model/expense.js');
 let User = require('./model/model.js');
@@ -22,6 +23,7 @@ app.use('/user', router);
 app.use('/expense', expence);
 app.use('/primemember', prime);
 app.use('/prime', primeUser);
+app.use('/password', forgetPassword);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
