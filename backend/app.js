@@ -8,6 +8,7 @@ let expence = require('./routers/expense.js');
 let prime = require('./routers/purches.js');
 let primeUser = require('./routers/primeUser.js')
 const forgetPassword = require('./routers/forgetPassword.js')
+const ForgotPasswordRequest = require('./model/forgetPassword.js')
 
 let Expense = require('./model/expense.js');
 let User = require('./model/model.js');
@@ -31,7 +32,8 @@ Expense.belongsTo(User);
 User.hasMany(Order);
 order.belongsTo(User);
 
-
+User.hasMany(ForgotPasswordRequest);
+ForgotPasswordRequest.belongsTo(User);
 
 
 sequelize
