@@ -1,0 +1,52 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.headline {
+  background: #006992;
+  padding: 1rem 3rem;
+  font-size: x-large;
+}
+
+#itemList {
+  background: #e2e2e2;
+  height: 50%;
+}
+
+.btn {
+  display: flex;
+  font-size: large;
+  justify-content: center;
+  color: rgb(227, 227, 233);
+  background-color: blue;
+  padding: 7px 12px;
+  border-radius: 9px;
+}
+
+.rows {
+  background: #bf80cc;
+  font-size: large;
+}
+
+.income {
+  color: green;
+  font-size: x-large;
+}
+
+.expence {
+  color: red;
+  font-size: x-large;
+}
+
+.end {
+  background: #4dc0f5;
+}
+
+.notes {
+  font-size: large;
+  background: #cc1d1d;
+  padding: 1rem 20rem;
+}

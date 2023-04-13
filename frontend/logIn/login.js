@@ -4,7 +4,7 @@ let url = 'http://localhost:4000/'
 let token = localStorage.getItem('token');
 
 document.getElementById('loginBtn').addEventListener('click', (e) => {
-  e.preventDefault()
+  // e.preventDefault()
 
   obj = JSON.stringify({
     email: document.getElementById('emailInput').value,
@@ -33,7 +33,8 @@ document.getElementById('loginBtn').addEventListener('click', (e) => {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error.response);
+      alert(error.response.data)
     });
 })
 
