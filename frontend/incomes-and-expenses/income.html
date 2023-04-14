@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./income.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>income</title>
   </head>
 
@@ -17,7 +18,6 @@
         <th class="headline">Date</th>
         <th class="headline">Category</th>
         <th class="headline">Description</th>
-        <th class="headline">Income</th>
         <th class="headline">Expesne</th>
 
         <!-- <th><button class="btn">click</button></th> -->
@@ -29,49 +29,11 @@
         <td class="rows">asdf</td>
         <td class="rows">asdf</td>
         <td class="rows">asdf</td>
-        <td class="rows">asdf</td>
       </tr>
-      <tr>
-        <td class="rows">df</td>
-      </tr>
-      <tr>
-        <td class="rows">df</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="end income">T Income = </td>
-        <td class="end expence">T Expenses = </td>
-      </tr>
+
     </table>
 
     <br>
-    <div>
-      <h1> yearlyexpence </h1>
-    </div>
-    <br>
-    <table id="yearlyexpence">
-      <tr>
-        <th class="headline">month</th>
-        <th class="headline">income</th>
-        <th class="headline">expence</th>
-        <th class="headline">saveings</th>
-      </tr>
-      <tr>
-        <td class="rows">as</td>
-        <td class="rows"></td>
-        <td class="rows"></td>
-        <td class="rows"></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td class="end income">T = </td>
-        <td class="end expence">T = </td>
-      </tr>
-    </table>
 
     <br>
 
@@ -93,7 +55,11 @@
         </td>
       </tr>
     </table>
-<button class="btn">download pdf</button>
+    <div class="linebtn">
+      <button class="btn line" id="downloadFile">download pdf</button>
+      <button class="btn line" id="backToHome">back To Home</button>
+    </div>
+    <script src="./income.js"></script>
   </body>
 
 </html>

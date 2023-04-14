@@ -251,3 +251,21 @@ document.getElementById('leadboard').addEventListener('click', () => {
       });
     })
 })
+
+let downloadList = document.getElementById('downloadList')
+downloadList.style.display = 'none'
+
+document.getElementById('downloadhistory').addEventListener('click', () => {
+  axios.get(url + '/expense/downloaditems', { headers: { 'Authorization': token, } })
+    .then(res => {
+      console.log(res.data.response)
+      res.data.response.forEach(el => {
+        let li = document.createElement('li');
+        li.innerHTML = `${el.userId} ${el.createdAt}`
+
+        downloadList.append(li)
+        
+      });
+      downloadList.style.display = 'block'
+    })
+})

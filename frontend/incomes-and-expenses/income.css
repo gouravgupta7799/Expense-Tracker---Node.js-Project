@@ -50,3 +50,12 @@ body {
   background: #cc1d1d;
   padding: 1rem 20rem;
 }
+
+.linebtn{
+  display: flex;
+  margin: 20px;
+}
+
+.line{
+  margin: 10px;
+}
