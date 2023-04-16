@@ -9,10 +9,25 @@ let form = document.getElementById('submitForm');
 let editForm = document.getElementById('editForm');
 let board = document.getElementById('board');
 
+isPrime()
+function isPrime() {
+  axios.get(url + '/expense', { headers: { 'Authorization': token, } })
+    .then(res => {
+      if (res.data.prime === true) {
+        premium.style.display = 'none';
+        let h1 = document.createElement('h1');
+        h1.innerHTML = 'you are a prime user now!!'
+        primeUser.append(h1)
+        primeUser.style.display = 'block'
+      }
+
+    })
+}
+
 editForm.style.display = 'none';
 board.style.display = 'none';
 
-showData()
+// showData()
 
 document.getElementById('exepenseBtn').addEventListener('click', (e) => {
   // e.preventDefault()
@@ -52,10 +67,9 @@ document.getElementById('exepenseBtn').addEventListener('click', (e) => {
 })
 
 
+function showData(index) {
 
-function showData() {
   // console.log(token)
-
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -63,35 +77,44 @@ function showData() {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
+      'index': index
     },
   };
 
   axios.request(config)
     .then((res) => {
-      // console.log(res)
-      let resp = res.data.data;
-      resp.forEach(response => {
 
-        let tr = document.createElement('tr');
-        tr.innerHTML = `
+      // console.log(res.status)
+      if (res.status === 200) {
+        // console.log(res)
+        table.innerHTML = ''
+        let resp = res.data.data;
+        resp.forEach(response => {
+
+          let tr = document.createElement('tr');
+          tr.innerHTML = `
           <td class="withDesc">${response.Description}</td>
           <td class="withPrice">${response.Price}</td>
           <td class="withcat">${response.Category}</td>
           <td><button class="Btn1 delete" id="${response.id}">delete</button><button class="Btn2 edit" id="${response.id}">edit</button></td>`
-        table.appendChild(tr);
-      });
-      if (res.data.prime === true) {
-        premium.style.display = 'none';
-        let h1 = document.createElement('h1');
-        h1.innerHTML = 'you are a prime user now!!'
-        primeUser.append(h1)
-        primeUser.style.display = 'block'
+          table.appendChild(tr);
+        })
+
+        let newInx = index + 1
+        document.getElementById('buttonsfor').innerHTML += `<button onclick="showData(${newInx})">${newInx + 1}</button>`
       }
+      else {
+        console.log(res.data.msg)
+      }
+
+
     })
     .catch((error) => {
       console.log(error);
     });
 }
+
+
 
 
 document.getElementById('tableItems').addEventListener('click', (e) => {
@@ -256,15 +279,15 @@ let downloadList = document.getElementById('downloadList')
 downloadList.style.display = 'none'
 
 document.getElementById('downloadhistory').addEventListener('click', () => {
-  axios.get(url + '/expense/downloaditems', { headers: { 'Authorization': token, } })
+  axios.get(url + '/prime/downloaditems', { headers: { 'Authorization': token, } })
     .then(res => {
-      console.log(res.data.response)
+      // console.log(res.data.response)
       res.data.response.forEach(el => {
         let li = document.createElement('li');
         li.innerHTML = `${el.userId} ${el.createdAt}`
 
         downloadList.append(li)
-        
+
       });
       downloadList.style.display = 'block'
     })

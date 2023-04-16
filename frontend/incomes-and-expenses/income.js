@@ -12,7 +12,7 @@ let yearlyexpence = document.getElementById('yearlyexpence')
 showData()
 document.getElementById('downloadFile').addEventListener('click', async () => {
 
-  axios.get('http://localhost:4000/expense/download', { headers: { 'Content-Type': 'application/json', 'Authorization': token, } })
+  axios.get('http://localhost:4000/prime/download', { headers: { 'Content-Type': 'application/json', 'Authorization': token, } })
     .then(Response => {
       console.log(Response.data)
       console.log(Response.status)

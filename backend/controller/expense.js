@@ -3,10 +3,8 @@ const { toInteger } = require('lodash');
 const Expense = require('../model/expense');
 let User = require('../model/model');
 const sequelize = require('../utils/DataBase');
-const { UploadImageModel } = require('sib-api-v3-sdk');
-const AWS = require('aws-sdk');
-const Downloaded = require('../model/downloaded');
-const { response } = require('express');
+
+
 
 
 exports.newExpense = async (req, res, next) => {
@@ -43,15 +41,27 @@ exports.newExpense = async (req, res, next) => {
   }
 }
 
-exports.allExpense = (req, res, next) => {
+exports.allExpense = async (req, res, next) => {
   let Id = req.user.id;
-  // console.log(req)
-  Expense.findAll({ where: { userId: Id } })
+  let index = req.header('index')
+  let skip = 5;
+  let total = await Expense.findAll({ where: { userId: Id } })
+  if (total.length >= index * skip) {
+  Expense.findAll({
+    where: { userId: Id },
+    offset: index * skip,
+    limit: 5
+  })
     .then(result => {
       // console.log(result)
-      res.json({ data: result, prime: req.user.isPrime })
+      res.status(200).json({ data: result, prime: req.user.isPrime })
     })
     .catch(err => console.log(err))
+  }
+  else {
+  res.status(201).json({ msg: 'no data found', prime: req.user.isPrime })
+  }
+
 }
 
 exports.deleteExpense = async (req, res, next) => {
@@ -129,59 +139,3 @@ exports.updateExpense = async (req, res, next) => {
   }
 }
 
-function UploadToS3(data, fileName) {
-
-  const BUCKET_NAME = 'expensetrecker'
-  const USER_KEY = 'AKIAXQ3PRZKAOOMHOUHH'
-  const SECRET_KEY = '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'
-
-  let S3buk = new AWS.S3({
-    accessKeyId: USER_KEY,
-    secretAccessKey: SECRET_KEY,
-
-  })
-  let params = {
-    Bucket: BUCKET_NAME,
-    Key: fileName,
-    Body: data,
-    ACL: 'public-read'
-  }
-  return new Promise((resolve, reject) => {
-    S3buk.upload(params, (err, responce) => {
-      if (err) {
-        console.log(err)
-        reject(err)
-      }
-      else {
-        resolve(responce.Location)
-      }
-    })
-  })
-
-}
-
-exports.downloadExpense = async (req, res, next) => {
-  let allExpenses = await req.user.getExpenses()
-  // console.log(allExpenses)
-  let stingExpenxe = JSON.stringify(allExpenses);
-  const userId = req.user.id;
-  let d = new Date()
-  let fileName = `expence.txt ${userId}/${d}`;
-  let fileUrl = await UploadToS3(stingExpenxe, fileName);
-  // console.log(fileUrl)
-
-  await Downloaded.create({
-    URL: fileUrl,
-    userId: req.user.id
-  })
-
-  res.status(200).json({ fileUrl, success: true })
-}
-
-
-exports.downloadedHistory = (req, res, next) => {
-  Downloaded.findAll({ where: { userId: req.user.id } })
-    .then(response => {
-      res.json({ response })
-    })
-}
