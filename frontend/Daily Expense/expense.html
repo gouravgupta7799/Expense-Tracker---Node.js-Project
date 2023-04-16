@@ -53,14 +53,23 @@
           <th>category</th>
           <th>button</th>
         </tr>
-        <tr>
-        <td class="withDesc">fgh</td>
-        <td class="withPrice">$ghj</td>
-        <td class="withcat">zxc</td>
-        <td><button class="Btn1">delete</button></td>
-        </tr>
+        <!-- <tr>
+          <td class="withDesc">fgh</td>
+          <td class="withPrice">$ghj</td>
+          <td class="withcat">zxc</td>
+          <td><button class="Btn1">delete</button></td>
+        </tr> -->
       </table>
       <div id="buttonsfor">
+        <div class="dropdown" id="giveclose">
+          <button onclick="myFunction()" class="dropbtn">number of rows</button>
+          <div id="myDropdown" class="dropdown-content">
+            <br><button class="btn" onclick="rowSide(5)">5</button>
+            <br><button class="btn" onclick="rowSide(10)">10</button>
+            <br><button class="btn" onclick="rowSide(15)">15</button>
+            <br><button class="btn" onclick="rowSide(25)">25</button>
+          </div>
+        </div>
         <button onclick="showData(0)">1</button>
       </div>
 

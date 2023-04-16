@@ -33,7 +33,7 @@ function showData() {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: 'http://localhost:4000/expense',
+    url: 'http://localhost:4000/prime/allExe',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
@@ -42,7 +42,7 @@ function showData() {
 
   axios.request(config)
     .then((res) => {
-      // console.log(res)
+      console.log(res)
       res.data.data.forEach(el => {
         let tr = document.createElement('tr');
         tr.innerHTML = `<td class="rows">${el.id}</td>

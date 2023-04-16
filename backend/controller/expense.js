@@ -43,23 +43,25 @@ exports.newExpense = async (req, res, next) => {
 
 exports.allExpense = async (req, res, next) => {
   let Id = req.user.id;
+  let rowNumber = req.header('rowNumber')
   let index = req.header('index')
-  let skip = 5;
+  rowNumber = toInteger(rowNumber)
+  let skip = rowNumber
   let total = await Expense.findAll({ where: { userId: Id } })
   if (total.length >= index * skip) {
-  Expense.findAll({
-    where: { userId: Id },
-    offset: index * skip,
-    limit: 5
-  })
-    .then(result => {
-      // console.log(result)
-      res.status(200).json({ data: result, prime: req.user.isPrime })
+    Expense.findAll({
+      where: { userId: Id },
+      offset: index * skip,
+      limit: rowNumber
     })
-    .catch(err => console.log(err))
+      .then(result => {
+        // console.log(result)
+        res.status(200).json({ data: result, prime: req.user.isPrime })
+      })
+      .catch(err => console.log(err))
   }
   else {
-  res.status(201).json({ msg: 'no data found', prime: req.user.isPrime })
+    res.status(201).json({ msg: 'no data found', prime: req.user.isPrime })
   }
 
 }

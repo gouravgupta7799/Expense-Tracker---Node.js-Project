@@ -2,7 +2,7 @@ let User = require('../model/model')
 const sequelize = require('../utils/DataBase');
 const AWS = require('aws-sdk');
 const Downloaded = require('../model/downloaded');
-
+const Expense = require('../model/expense');
 
 exports.leadBoardFeatures = async (req, res, next) => {
   try {
@@ -22,9 +22,9 @@ exports.leadBoardFeatures = async (req, res, next) => {
 
 function UploadToS3(data, fileName) {
 
-  const BUCKET_NAME = 'expensetrecker'
-  const USER_KEY = 'AKIAXQ3PRZKAOOMHOUHH'
-  const SECRET_KEY = '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'
+  const BUCKET_NAME = process.env.BUCKET_NAME
+  const USER_KEY = process.env.USER_KEY
+  const SECRET_KEY = process.env.SECRET_KEY
 
   let S3buk = new AWS.S3({
     accessKeyId: USER_KEY,
@@ -90,4 +90,18 @@ exports.downloadedHistory = async (req, res, next) => {
       await t.rollback()
       console.log(err)
     })
+}
+
+
+exports.allExe = async (req, res, next) => {
+  let Id = req.user.id;
+  // console.log(Id)
+  Expense.findAll({
+    where: { userId: Id },
+  })
+    .then(result => {
+      // console.log(result)
+      res.status(200).json({ data: result, prime: req.user.isPrime })
+    })
+    .catch(err => console.log(err))
 }

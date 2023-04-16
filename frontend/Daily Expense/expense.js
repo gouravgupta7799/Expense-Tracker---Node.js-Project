@@ -8,6 +8,7 @@ let table = document.getElementById('tableItems');
 let form = document.getElementById('submitForm');
 let editForm = document.getElementById('editForm');
 let board = document.getElementById('board');
+let rowNumber = localStorage.getItem('rowNumberofItems');
 
 isPrime()
 function isPrime() {
@@ -66,6 +67,10 @@ document.getElementById('exepenseBtn').addEventListener('click', (e) => {
     });
 })
 
+// document.getElementById('numOfRow').addEventListener('click', () => {
+
+// })
+
 
 function showData(index) {
 
@@ -77,7 +82,8 @@ function showData(index) {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
-      'index': index
+      'index': index,
+      'rowNumber': rowNumber
     },
   };
 
@@ -106,7 +112,6 @@ function showData(index) {
       else {
         console.log(res.data.msg)
       }
-
 
     })
     .catch((error) => {
@@ -292,3 +297,35 @@ document.getElementById('downloadhistory').addEventListener('click', () => {
       downloadList.style.display = 'block'
     })
 })
+
+
+function rowSide(i) {
+  localStorage.setItem('rowNumberofItems', i)
+  document.getElementById('giveclose').style.display = 'none'
+}
+
+
+
+
+
+
+
+
+
+
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+window.onclick = function (event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
