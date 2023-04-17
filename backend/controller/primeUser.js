@@ -16,6 +16,7 @@ exports.leadBoardFeatures = async (req, res, next) => {
   }
   catch (err) {
     console.log(err)
+    res.status(500).json({ 'error': err })
   }
 }
 
@@ -56,13 +57,11 @@ exports.downloadExpense = async (req, res, next) => {
 
   try {
     let allExpenses = await req.user.getExpenses({ transaction: t })
-    // console.log(allExpenses)
     let stingExpenxe = JSON.stringify(allExpenses);
     const userId = req.user.id;
     let d = new Date()
     let fileName = `expence.txt ${userId}/${d}`;
     let fileUrl = await UploadToS3(stingExpenxe, fileName);
-    // console.log(fileUrl)
 
     await Downloaded.create({
       URL: fileUrl,
@@ -75,33 +74,37 @@ exports.downloadExpense = async (req, res, next) => {
   catch (err) {
     await t.rollback()
     console.log(err)
+    res.status(500).json({ 'error': err })
   }
 }
 
 
 exports.downloadedHistory = async (req, res, next) => {
-  let t = await sequelize.transaction()
-  Downloaded.findAll({ where: { userId: req.user.id }, transaction: t })
-    .then(async (response) => {
-      await t.commit()
-      res.json({ response })
-    })
-    .catch(async (err) => {
-      await t.rollback()
-      console.log(err)
-    })
+  try {
+    let t = await sequelize.transaction()
+    let response = await Downloaded.findAll({ where: { userId: req.user.id }, transaction: t })
+
+    await t.commit()
+    res.json({ response })
+  }
+  catch (err) {
+    await t.rollback()
+    console.log(err)
+    res.status(500).json({ 'error': err })
+  }
 }
 
 
 exports.allExe = async (req, res, next) => {
-  let Id = req.user.id;
-  // console.log(Id)
-  Expense.findAll({
-    where: { userId: Id },
-  })
-    .then(result => {
-      // console.log(result)
-      res.status(200).json({ data: result, prime: req.user.isPrime })
+  try {
+    let Id = req.user.id;
+    let result = await Expense.findAll({
+      where: { userId: Id },
     })
-    .catch(err => console.log(err))
+    res.status(200).json({ data: result, prime: req.user.isPrime })
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).json({ 'error': err })
+  }
 }

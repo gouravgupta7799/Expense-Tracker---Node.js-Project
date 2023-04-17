@@ -1,6 +1,8 @@
 
 let url = 'http://localhost:4000/'
 
+let forgetPass = document.getElementById('forgetPass');
+let forgetemailform = document.getElementById('forgetemailform');
 let token = localStorage.getItem('token');
 
 document.getElementById('loginBtn').addEventListener('click', (e) => {
@@ -26,7 +28,6 @@ document.getElementById('loginBtn').addEventListener('click', (e) => {
     .then((response) => {
       console.log(JSON.stringify(response.data));
       if (response.status === 200) {
-        // console.log(response.data.token)
 
         localStorage.setItem('token', response.data.token);
         window.location.href = 'http://127.0.0.1:5500/Daily%20Expense/expense.html?'
@@ -39,16 +40,17 @@ document.getElementById('loginBtn').addEventListener('click', (e) => {
 })
 
 
-let forgetPass = document.getElementById('forgetPass');
-let forgetemailform = document.getElementById('forgetemailform');
 
 forgetemailform.style.display = 'none';
+
 
 forgetPass.addEventListener('click', (e) => {
   // e.preventDefault()
   forgetemailform.style.display = 'block';
   document.getElementById('submitForm').style.display = 'none'
 })
+
+
 
 document.getElementById('forgetBtn').addEventListener('click', (e) => {
   // e.preventDefault()

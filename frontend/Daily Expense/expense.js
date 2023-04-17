@@ -1,4 +1,4 @@
-// let Razorpay = require('Razorpay');
+
 
 let url = 'http://localhost:4000'
 
@@ -28,7 +28,6 @@ function isPrime() {
 editForm.style.display = 'none';
 board.style.display = 'none';
 
-// showData()
 
 document.getElementById('exepenseBtn').addEventListener('click', (e) => {
   // e.preventDefault()
@@ -52,7 +51,7 @@ document.getElementById('exepenseBtn').addEventListener('click', (e) => {
 
   axios.request(config)
     .then((res) => {
-      // console.log(res)
+
       let response = res.data;
       let tr = document.createElement('tr');
       tr.innerHTML = `
@@ -67,14 +66,9 @@ document.getElementById('exepenseBtn').addEventListener('click', (e) => {
     });
 })
 
-// document.getElementById('numOfRow').addEventListener('click', () => {
-
-// })
-
 
 function showData(index) {
 
-  // console.log(token)
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -90,9 +84,7 @@ function showData(index) {
   axios.request(config)
     .then((res) => {
 
-      // console.log(res.status)
       if (res.status === 200) {
-        // console.log(res)
         table.innerHTML = ''
         let resp = res.data.data;
         resp.forEach(response => {
@@ -105,7 +97,6 @@ function showData(index) {
           <td><button class="Btn1 delete" id="${response.id}">delete</button><button class="Btn2 edit" id="${response.id}">edit</button></td>`
           table.appendChild(tr);
         })
-
         let newInx = index + 1
         document.getElementById('buttonsfor').innerHTML += `<button onclick="showData(${newInx})">${newInx + 1}</button>`
       }
@@ -126,7 +117,6 @@ document.getElementById('tableItems').addEventListener('click', (e) => {
   // e.preventDefault();
   if (e.target.classList.contains('delete')) {
     let id = e.target.id
-
 
     let data = JSON.stringify({ id: id })
     let config = {
@@ -227,8 +217,7 @@ document.getElementById('premium').addEventListener('click', (e) => {
 
   axios.request(config)
     .then((response) => {
-      // console.log(response.data.key_id)
-      // console.log(response.data.ord.id)
+
       console.log(response)
       let option = {
         "key": response.data.key_id,
@@ -286,7 +275,7 @@ downloadList.style.display = 'none'
 document.getElementById('downloadhistory').addEventListener('click', () => {
   axios.get(url + '/prime/downloaditems', { headers: { 'Authorization': token, } })
     .then(res => {
-      // console.log(res.data.response)
+
       res.data.response.forEach(el => {
         let li = document.createElement('li');
         li.innerHTML = `${el.userId} ${el.createdAt}`
@@ -303,9 +292,6 @@ function rowSide(i) {
   localStorage.setItem('rowNumberofItems', i)
   document.getElementById('giveclose').style.display = 'none'
 }
-
-
-
 
 
 

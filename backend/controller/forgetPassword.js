@@ -41,10 +41,15 @@ exports.forgetPassword = (req, res, next) => {
         res.send(d)
       })
 
-      .catch(err => console.log('123ee..', err.body))
+      .catch(err => {
+        console.log('123ee..', err.body)
+        res.status(500).json({ 'error': err.body })
+      })
+
   }
   catch (err) {
     console.log('err>>>', err.body)
+    res.status(500).json({ 'error': err })
   };
 };
 
@@ -69,7 +74,6 @@ exports.postresetPassword = async (req, res, next) => {
   try {
     let password = req.body.passwordInput;
     let Id = req.body.id
-    // console.log(req.body)
     let foundEmail = await User.findOne({ where: { id: Id } });
     if (!foundEmail) {
       return res.status(402).send('user email not found');
@@ -94,5 +98,6 @@ exports.postresetPassword = async (req, res, next) => {
   }
   catch (err) {
     console.log(err)
+    res.status(500).json({ 'error': err })
   }
 }

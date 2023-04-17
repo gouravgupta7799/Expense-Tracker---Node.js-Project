@@ -2,8 +2,7 @@
 const Razorpay = require('razorpay');
 const Order = require('../model/order');
 const User = require('../model/model');
-const Expence = require('../model/expense');
-const Expense = require('../model/expense');
+
 
 exports.primeMembership = async (req, res, next) => {
   try {
@@ -15,21 +14,19 @@ exports.primeMembership = async (req, res, next) => {
     rzp.orders.create({ amount, currency: "INR" }, (err, order) => {
       if (err) {
         console.log(err)
+        return res.status(500).json({ 'error': err })
       }
-      // console.log(order.id)
-      // console.log(order.status)
-      // console.log(req.user.id)
-      Order.create({
+      let ord = Order.create({
         orderId: order.id,
         status: 'PENDING',
         userId: req.user.id
       })
-        .then((ord) => { return res.status(201).json({ ord, key_id: rzp.key_id }) })
-        .catch(err => { console.log(err) })
+      return res.status(201).json({ ord, key_id: rzp.key_id })
     })
   }
   catch (err) {
     console.log(err)
+    res.status(500).json({ 'error': err })
   }
 }
 
@@ -38,8 +35,6 @@ exports.transactionUpdate = async (req, res, next) => {
     let order = await Order.findOne({ where: { orderId: req.body.order_id } })
     let user = await User.findOne({ where: { id: req.user.id } })
     user.isPrime = true;
-    // console.log(req.body.status);
-    // console.log(req.body.payment_id)
 
     order.paymantId = req.body.payment_id;
     order.status = req.body.status;
@@ -49,6 +44,7 @@ exports.transactionUpdate = async (req, res, next) => {
   }
   catch (err) {
     console.log(err)
+    res.status(500).json({ 'error': err })
   };
 };
 

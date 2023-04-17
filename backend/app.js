@@ -1,6 +1,11 @@
 const express = require('express');
 const bodyperser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 
 const sequelize = require('./utils/DataBase.js');
 let router = require('./routers/router.js');
@@ -15,10 +20,17 @@ let order = require('./model/order.js');
 const Order = require('./model/order.js');
 const ForgotPasswordRequest = require('./model/forgetPassword.js');
 const Downloaded = require('./model/downloaded.js');
+let acessControl = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flag: 'a' }
+)
 
 const app = express();
 app.use(cors());
 app.use(bodyperser.json({ extended: false }));
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', { stream: acessControl }));
 
 
 app.use('/user', router);
@@ -47,4 +59,4 @@ sequelize
   .sync()
   .catch(err => console.log(err))
 
-app.listen(4000)
+app.listen(process.env.PORT)

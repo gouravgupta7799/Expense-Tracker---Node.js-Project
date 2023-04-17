@@ -5,8 +5,6 @@ let User = require('../model/model');
 const sequelize = require('../utils/DataBase');
 
 
-
-
 exports.newExpense = async (req, res, next) => {
   let t = await sequelize.transaction();
   try {
@@ -32,36 +30,47 @@ exports.newExpense = async (req, res, next) => {
     } catch (err) {
       console.log(err)
       t.rollback()
+      return res.status(500).json({ 'error': err })
     }
     res.status(200).send(newExpense);
 
   } catch (err) {
     console.log(err)
     t.rollback()
+    res.status(500).json({ 'error': err })
   }
 }
 
 exports.allExpense = async (req, res, next) => {
-  let Id = req.user.id;
-  let rowNumber = req.header('rowNumber')
-  let index = req.header('index')
-  rowNumber = toInteger(rowNumber)
-  let skip = rowNumber
-  let total = await Expense.findAll({ where: { userId: Id } })
-  if (total.length >= index * skip) {
-    Expense.findAll({
-      where: { userId: Id },
-      offset: index * skip,
-      limit: rowNumber
-    })
-      .then(result => {
-        // console.log(result)
-        res.status(200).json({ data: result, prime: req.user.isPrime })
+  try {
+    let Id = req.user.id;
+    let rowNumber = req.header('rowNumber')
+    let index = req.header('index')
+    rowNumber = toInteger(rowNumber)
+    let skip = rowNumber
+    let total = await Expense.findAll({ where: { userId: Id } })
+    if (total.length >= index * skip) {
+      Expense.findAll({
+        where: { userId: Id },
+        offset: index * skip,
+        limit: rowNumber
       })
-      .catch(err => console.log(err))
+        .then(result => {
+          // console.log(result)
+          res.status(200).json({ data: result, prime: req.user.isPrime })
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json({ 'error': err })
+        })
+    }
+    else {
+      res.status(201).json({ msg: 'no data found', prime: req.user.isPrime })
+    }
   }
-  else {
-    res.status(201).json({ msg: 'no data found', prime: req.user.isPrime })
+  catch (err) {
+    console.log(err)
+    res.status(500).json({ 'error': err })
   }
 
 }
@@ -93,11 +102,13 @@ exports.deleteExpense = async (req, res, next) => {
     catch (err) {
       console.log(err);
       t.rollback();
+      return res.status(500).json({ 'error': err })
     }
   }
   catch (err) {
     console.log(err);
     t.rollback()
+    return res.status(500).json({ 'error': err })
   }
 }
 
@@ -133,11 +144,13 @@ exports.updateExpense = async (req, res, next) => {
     } catch (err) {
       console.log(err);
       t.rollback()
+      return res.status(500).json({ 'error': err })
     }
   }
   catch (err) {
     console.log(err);
     t.rollback()
+    return res.status(500).json({ 'error': err })
   }
 }
 
