@@ -22,7 +22,7 @@ exports.forgetPassword = (req, res, next) => {
     const tranEmailApi = new Sib.TransactionalEmailsApi();
 
     const sender = {
-      email: 'gouravgupta7799@gmail.com'
+      email: 'dummyuser@gmail.com'
     }
     const receivers = [
       {
@@ -55,18 +55,25 @@ exports.forgetPassword = (req, res, next) => {
 
 
 exports.getresetPassword = async (req, res, next) => {
-  let Id = req.params.id
+  try {
+    let Id = req.params.id
 
-  let ForgetPass = await ForgotPasswordRequest.findByPk(Id);
-  let userId = ForgetPass.userId
+    let ForgetPass = await ForgotPasswordRequest.findByPk(Id);
+    let userId = ForgetPass.userId
 
-  if (ForgetPass.isValid === false) {
-    return res.status(404).send('<html><head></head><body><h1>request is not active</h1></body></html>')
-  }
-  else if (ForgetPass.isValid === true) {
-    res.status(200).send(`
+    if (ForgetPass.isValid === false) {
+      return res.status(404).send('<html><head></head><body><h1>request is not active</h1></body></html>')
+    }
+    else if (ForgetPass.isValid === true) {
+      res.status(200).send(`
     <button><a href="http://127.0.0.1:5500/recoverPassWord/recover.html?id=${userId}">click here for reset your password</a></button>
     `)
+    }
+  }
+  catch (err) {
+    console.log(err)
+    res.send(err)
+
   }
 }
 

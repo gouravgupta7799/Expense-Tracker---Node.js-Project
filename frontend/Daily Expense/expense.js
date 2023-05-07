@@ -223,11 +223,12 @@ document.getElementById('premium').addEventListener('click', (e) => {
         "key": response.data.key_id,
         "order_id": response.data.ord.orderId,
         "handler": async function (response) {
-
+          console.log("-----------------------111___" + response.data);
           axios.post(url + '/primemember/updatetransaction', {
             order_id: option.order_id, payment_id: response.razorpay_payment_id, status: 'SUCCESSFUL'
           }, { headers: { 'Authorization': token } })
             .then((res) => {
+              console.log("-----------------------"+option.order_id)
               premium.style.display = 'none';
               let h1 = document.createElement('h1');
               h1.innerHTML = 'you are a prime user now!!'

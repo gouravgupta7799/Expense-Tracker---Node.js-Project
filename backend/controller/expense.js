@@ -80,8 +80,6 @@ exports.deleteExpense = async (req, res, next) => {
   try {
     let Id = req.body.id;
     let userId = req.user.id;
-    // console.log(Id);
-    // console.log(userId);
 
     let exp = await Expense.findOne({
       where: { id: Id, userId: userId },
@@ -118,7 +116,6 @@ exports.updateExpense = async (req, res, next) => {
   try {
     let Id = req.body.id;
     let userId = req.user.id;
-    // console.log(Id)
     let exp = await Expense.findOne({
       where: { id: Id, userId: userId },
       transaction: t

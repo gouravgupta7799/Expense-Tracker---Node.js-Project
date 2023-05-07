@@ -26,6 +26,9 @@ let acessControl = fs.createWriteStream(
 )
 
 const app = express();
+const dotenv = require("dotenv")
+dotenv.config()
+
 app.use(cors());
 app.use(bodyperser.json({ extended: false }));
 app.use(helmet());
@@ -39,6 +42,10 @@ app.use('/primemember', prime);
 app.use('/prime', primeUser);
 app.use('/password', forgetPassword);
 
+app.use((req, res) => {
+  console.log(req.url)
+  res.send(path.join(__dirname, 'frontend/signIn/signin.html'))
+})
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

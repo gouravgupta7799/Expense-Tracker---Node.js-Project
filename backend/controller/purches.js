@@ -21,6 +21,7 @@ exports.primeMembership = async (req, res, next) => {
         status: 'PENDING',
         userId: req.user.id
       })
+      console.log(ord)
       return res.status(201).json({ ord, key_id: rzp.key_id })
     })
   }
@@ -32,6 +33,7 @@ exports.primeMembership = async (req, res, next) => {
 
 exports.transactionUpdate = async (req, res, next) => {
   try {
+    console.log("-------------------"+req.body.orderId)
     let order = await Order.findOne({ where: { orderId: req.body.order_id } })
     let user = await User.findOne({ where: { id: req.user.id } })
     user.isPrime = true;
